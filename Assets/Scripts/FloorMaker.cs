@@ -11,23 +11,96 @@ public class FloorMaker : MonoBehaviour {
 // translate the basic pseudocode here into C#
 
 //	DECLARE CLASS MEMBER VARIABLES:
-//	Declare a private integer called myCounter that starts at 0; 		// count how many floor tiles this FloorMaker has instantiated
-//	Declare a public Transform called floorPrefab, assign the prefab in inspector;
-//	Declare a public Transform called floorMakerPrefab, assign the prefab in inspector; 
+//	Declare a private integer called myCounter that starts at 0; 	
+public static int globalFloorCount;
+bool clone = false;
+int counterLife;
+int myCounter = 0;// count how many floor tiles this FloorMaker has instantiated
+int roomWidth = 0;
+int x = 0;
+int roomHeight = 0;
+int roomOffset;
+int y = 0;
+public Transform floorPrefab;//	Declare a public Transform called floorPrefab, assign the prefab in inspector;
+public FloorMaker floorMakerPrefab;//	Declare a public Transform called floorMakerPrefab, assign the prefab in inspector; 
 
+	void Start() {
+		if(!clone) {
+			globalFloorCount = 0;
+		}
+		else {
+			counterLife = Random.Range(20, 50);
+			roomWidth = Random.Range(1, 10);
+			roomHeight = Random.Range(1, 10);
+			roomOffset = Random.Range(0, roomHeight-1);
+		}
+	}
 	void Update () {
 //		If counter is less than 50, then:
+		if( (myCounter < counterLife || !clone)) {//&& globalFloorCount < 500) || !clone ) {
 //			Generate a random number from 0.0f to 1.0f;
+			float randomNumber = Random.Range(0.0f, 1.0f);
 //			If random number is less than 0.25f, then rotate myself 90 degrees on Z axis;
+			if(randomNumber < 0.08f) {
+				transform.eulerAngles += new Vector3(0f, 0f, 90f);
+			}
 //				... Else if number is 0.25f-0.5f, then rotate myself -90 degrees on Z axis;
+			else if( randomNumber < 0.16f) {
+				transform.eulerAngles += new Vector3(0f, 0f, -90f);
+			}
 //				... Else if number is 0.99f-1.0f, then instantiate a floorMakerPrefab clone at my current position;
+			else if(randomNumber >= 0.99f) {
+				FloorMaker myClone = Instantiate(floorMakerPrefab, transform.position, transform.rotation);
+				//The clone will also be rotated and pushed forward
+				float randomNumber2 = Random.Range(0.0f, 100f);
+				if(randomNumber2 < 50f) {
+					myClone.transform.eulerAngles += new Vector3(0f, 0f, 90f);
+				}
+				else {
+					myClone.transform.eulerAngles += new Vector3(0f, 0f, -90f);
+				}
+				myClone.transform.position += myClone.transform.up;
+				myClone.clone = true;
+				//Debug.Log("H");
+			}
 //			// end elseIf
-
 //			Instantiate a floorPrefab clone at current position;
+			Instantiate(floorPrefab, transform.position, transform.rotation);
 //			Move 1 unit "upwards" based on this object's local rotation (e.g. with rotation 0,0,0 "upwards" is (0,1,0)... but with rotation 0,0,180 then "upwards" is (0,-1, 0)... )
+			transform.position += transform.up;
 //			Increment counter;
+			myCounter++;
+			globalFloorCount++;
+		}
 //		Else:
+		else {
+			//At the end of the life of each clone, it creates a room
 //			Destroy my game object; 		// self destruct if I've made enough tiles already
+			Instantiate(floorPrefab, transform.position, transform.rotation);
+			//Moves along creating a room
+			if(x == 0 && y == 0) {
+				transform.position-= transform.right * roomOffset;
+				x++;
+				Instantiate(floorPrefab, transform.position, transform.rotation);
+			
+			}
+			else if(x == roomWidth) {
+				if(y==roomHeight) {
+					Destroy(this.gameObject);
+				}
+				else {
+					x = 0;
+					y++;
+					transform.position += transform.up;
+					transform.position -= transform.right * roomWidth;
+				}
+			}
+			else {
+				x++;
+				transform.position += transform.right;
+			}
+		}
+		//TO DO (possibly): allows more hallways to be created out from the sides
 	}
 
 } // don't delete, end of FloorMaker class

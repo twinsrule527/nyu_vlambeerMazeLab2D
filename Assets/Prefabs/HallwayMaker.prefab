@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1205195299569171216}
   - component: {fileID: 8526925960506713578}
   - component: {fileID: 6343382058574851184}
+  - component: {fileID: 3595183581482630999}
   m_Layer: 0
-  m_Name: FloorMaker
+  m_Name: HallwayMaker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,11 +40,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5676981078076824610}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac5378c783021624995364905960b49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floorPrefab: {fileID: 8979439212572352807, guid: 4348ebabc3612614f8c839ff067102c7,
+    type: 3}
+  floorMakerPrefab: {fileID: 8526925960506713578}
 --- !u!212 &6343382058574851184
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -94,3 +98,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3595183581482630999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676981078076824610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d687f5f2b37f194b971990cb5ecc732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clone: 0
+  minHallLength: 7
+  floorPrefab: {fileID: 8979439212572352807, guid: 4348ebabc3612614f8c839ff067102c7,
+    type: 3}
+  HallwayMakerPrefab: {fileID: 3595183581482630999}
+  roomMakerPrefab: {fileID: 857112423546122825, guid: 063ebc4205ab34541b8e19a78581e71b,
+    type: 3}
