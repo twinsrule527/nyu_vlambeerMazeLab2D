@@ -12,10 +12,17 @@ public class ManageRoom : MonoBehaviour
     public Transform wallPrefab;
     public List<Transform> Walls = new List<Transform>();
     public HallwayMaker startHallway;
+    public Camera myCamera;
+    public PlayerScript myPlayer;
     public static int globalFloorCount;
+    public bool playerMove;
     bool pause = false;//Used to keep track if the game is paused
     bool endgame = false;//Used to keep track if the game has ended
-    int currentTile = 0; //Used at the end of the game to create walls around the floor
+    int currentTile = 100000; //Used at the end of the game to create walls around the floor
+    float cameraSizeControl = 1;
+    public float baseCameraSize = 15f;
+    public float maxCameraSizeControl = 10f;
+    public float minCameraSizeControl = 0.1f;
     void Start() {
         myHallways.Add(startHallway);
     }
@@ -58,17 +65,17 @@ public class ManageRoom : MonoBehaviour
                 List<Vector3> wallShift = new List<Vector3>();
                 //Adds the 8 rays around the square: up, right, down, left, up-right, up-left, right-down, left-down
                 Vector2 ph_Vector = transform.up + transform.right;
-                wallShift.Add(ph_Vector);
-                myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//45
+                //wallShift.Add(ph_Vector);
+                //myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//45
                 ph_Vector = -transform.up + transform.right;
-                wallShift.Add(ph_Vector);
-                myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//-45
+                //wallShift.Add(ph_Vector);
+                //myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//-45
                 ph_Vector = -transform.up - transform.right;
-                wallShift.Add(ph_Vector);
-                myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//-135
+                //wallShift.Add(ph_Vector);
+                //myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//-135
                 ph_Vector = transform.up - transform.right;
-                wallShift.Add(ph_Vector);
-                myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//135
+               // wallShift.Add(ph_Vector);
+                //myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//135
                 ph_Vector = transform.up;
                 wallShift.Add(ph_Vector);
                 myRay.Add(new Ray2D(Tiles[currentTile].position, transform.up));//90
@@ -98,6 +105,64 @@ public class ManageRoom : MonoBehaviour
 
                 currentTile++ ;
             }
+        }
+        if( endgame && Input.GetKeyDown(KeyCode.C)) {
+            if(!playerMove) {
+                playerMove = true;
+                myCamera.orthographicSize = 5;
+            }
+            else {
+                playerMove = false;
+            }
+        }
+        //This script also consists of camera management
+        //To start, average the x and y positions of each tile
+        if(!playerMove) {
+            float camera_min_x = 0;
+            float camera_min_y = 0;
+            float camera_max_x = 0;
+            float camera_max_y = 0;
+            for(int i =0; i < Tiles.Count; i++ ) {
+                if(Tiles[i].position.x > camera_max_x ) {
+                    camera_max_x = Tiles[i].position.x;
+                }
+                else if( Tiles[i].position.x < camera_min_x ) {
+                    camera_min_x = Tiles[i].position.x;
+                }
+                if(Tiles[i].position.y > camera_max_y ) {
+                    camera_max_y = Tiles[i].position.y;
+                }
+                else if( Tiles[i].position.y < camera_min_y ) {
+                    camera_min_y = Tiles[i].position.y;
+                }
+            }
+            if(Input.GetKey(KeyCode.Minus)) {
+                if(cameraSizeControl < maxCameraSizeControl) {
+                    cameraSizeControl += Time.deltaTime;
+                }
+            }
+            if(Input.GetKey(KeyCode.Equals)) {
+                if(cameraSizeControl > minCameraSizeControl) {
+                    cameraSizeControl -= Time.deltaTime;
+                }
+            }
+            //myCamera.transform.position = new Vector3((camera_max_x +camera_min_x) / 2, (camera_max_y + camera_min_y) / 2, -10f);
+            myCamera.orthographicSize = baseCameraSize * cameraSizeControl;
+            if(Input.GetKey(KeyCode.LeftArrow)) {
+                myCamera.transform.position -= transform.right * Time.deltaTime * myCamera.orthographicSize / 3;
+            }
+            if(Input.GetKey(KeyCode.RightArrow)) {
+                myCamera.transform.position += transform.right * Time.deltaTime * myCamera.orthographicSize / 3;
+            }
+            if(Input.GetKey(KeyCode.UpArrow)) {
+                myCamera.transform.position += transform.up * Time.deltaTime * myCamera.orthographicSize / 3;
+            }
+            if(Input.GetKey(KeyCode.DownArrow)) {
+                myCamera.transform.position -= transform.up * Time.deltaTime * myCamera.orthographicSize / 3;
+            }
+        }
+        else {
+            myCamera.transform.position = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y, -10f);
         }
     }
 }
