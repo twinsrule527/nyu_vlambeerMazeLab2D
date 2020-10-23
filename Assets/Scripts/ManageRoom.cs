@@ -108,11 +108,16 @@ public class ManageRoom : MonoBehaviour
         }
         if( endgame && Input.GetKeyDown(KeyCode.C)) {
             if(!playerMove) {
+                //When you first press 'C', a finish point will be set, and the camera will zoom in on the player
                 playerMove = true;
                 myCamera.orthographicSize = 5;
+                int randomTileChoice = Random.Range(Mathf.RoundToInt(Tiles.Count / 3 * 2), Tiles.Count-1);
+                SpriteRenderer tileSprite = Tiles[randomTileChoice].gameObject.GetComponent<SpriteRenderer>();
+                tileSprite.color = Color.red;
+                Tiles[randomTileChoice].gameObject.AddComponent<TileEnd>();
             }
             else {
-                playerMove = false;
+                //playerMove = false;
             }
         }
         //This script also consists of camera management
@@ -162,7 +167,7 @@ public class ManageRoom : MonoBehaviour
             }
         }
         else {
-            myCamera.transform.position = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y, -10f);
+            //myCamera.transform.position = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y, -10f);
         }
     }
 }
