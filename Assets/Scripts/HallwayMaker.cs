@@ -21,6 +21,19 @@ public class HallwayMaker : MonoBehaviour
     {
         if(!clone) {
             globalFloorCount = 0;
+            float rnd = Random.Range(0f, 1.0f);
+            if(rnd < 0.25f) {
+                transform.eulerAngles = new Vector3(0f, 0f, 90f);
+            }
+            else if(rnd < 0.5f) {
+                transform.eulerAngles = new Vector3(0f, 0f, 180f);
+            }
+            else if( rnd < 0.75f) {
+                transform.eulerAngles = new Vector3(0f, 0f, 270f);
+            }
+            else {
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            }
 		}
         else {
             counterLife = Random.Range(20, 50);

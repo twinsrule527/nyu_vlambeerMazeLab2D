@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
 {
     public ManageRoom myManager;
     public Camera myCamera;
+    public Transform myShadow;
     Ray2D lastRay;
     // Update is called once per frame
     void Update()
@@ -15,13 +16,14 @@ public class PlayerScript : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.UpArrow)) {
                 transform.eulerAngles = new Vector3(0f, 0f, 0f);
                 Ray2D myRay = new Ray2D(transform.position, transform.up);
-                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized);
+                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized, 1);
                 if(myRayHit.collider != null && myRayHit.collider.CompareTag("Floor")) {
                     Vector2 rayCheck = new Vector2((myRayHit.transform.position - transform.up).x, (myRayHit.transform.position - transform.up).y);
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        transform.position = myRayHit.transform.position;
+                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -29,13 +31,14 @@ public class PlayerScript : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.DownArrow)) {
                 transform.eulerAngles = new Vector3(0f, 0f, 180f);
                 Ray2D myRay = new Ray2D(transform.position, transform.up);
-                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized);
+                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized, 1);
                 if(myRayHit.collider != null && myRayHit.collider.CompareTag("Floor")) {
                     Vector2 rayCheck = new Vector2((myRayHit.transform.position - transform.up).x, (myRayHit.transform.position - transform.up).y);
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        transform.position = myRayHit.transform.position;
+                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -43,13 +46,14 @@ public class PlayerScript : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.RightArrow)) {
                 transform.eulerAngles = new Vector3(0f, 0f, 270f);
                 Ray2D myRay = new Ray2D(transform.position, transform.up);
-                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized);
+                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized, 1);
                 if(myRayHit.collider != null && myRayHit.collider.CompareTag("Floor")) {
                     Vector2 rayCheck = new Vector2((myRayHit.transform.position - transform.up).x, (myRayHit.transform.position - transform.up).y);
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        transform.position = myRayHit.transform.position;
+                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -57,13 +61,14 @@ public class PlayerScript : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.LeftArrow)) {
                 transform.eulerAngles = new Vector3(0f, 0f, 90f);
                 Ray2D myRay = new Ray2D(transform.position, transform.up);
-                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized);
+                RaycastHit2D myRayHit = Physics2D.Raycast(myRay.origin, myRay.direction.normalized, 1);
                 if(myRayHit.collider != null && myRayHit.collider.CompareTag("Floor")) {
                     Vector2 rayCheck = new Vector2((myRayHit.transform.position - transform.up).x, (myRayHit.transform.position - transform.up).y);
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        transform.position = myRayHit.transform.position;
+                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                     }
                     Debug.Log(myRayHit.collider.ToString());
                     //Debug.Log(myManager.Tiles.Find(myRayHit.collider.transform).ToString());
