@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 //PURPOSE: A manager program for dealing with any issues, plus key input
 //USAGE: Attached to an empty manager object
 public class ManageRoom : MonoBehaviour
@@ -17,6 +18,9 @@ public class ManageRoom : MonoBehaviour
     public Transform xKey, yKey;
     public Transform xCompCenter, yCompCenter;
     public Transform Edge;
+    public Text bottomText;
+    public Text bottomText2;
+    public Text controlText;
     public static int globalFloorCount;
     public bool playerMove;
     bool pause = false;//Used to keep track if the game is paused
@@ -266,12 +270,12 @@ public class ManageRoom : MonoBehaviour
             }
             if(Input.GetKey(KeyCode.Minus)) {
                 if(cameraSizeControl < maxCameraSizeControl) {
-                    cameraSizeControl += Time.deltaTime * 3f;
+                    cameraSizeControl += Time.deltaTime * 2f;
                 }
             }
             if(Input.GetKey(KeyCode.Equals)) {
                 if(cameraSizeControl > minCameraSizeControl) {
-                    cameraSizeControl -= Time.deltaTime * 3f;
+                    cameraSizeControl -= Time.deltaTime * 2f;
                 }
             }
             //myCamera.transform.position = new Vector3((camera_max_x +camera_min_x) / 2, (camera_max_y + camera_min_y) / 2, -10f);
@@ -291,6 +295,24 @@ public class ManageRoom : MonoBehaviour
         }
         else {
             //myCamera.transform.position = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y, -10f);
+        }
+        //Text: if currently procedurally generating, the number of squares is recorded. If player is moving, number of steps is recorded
+        if(endgame == 0) {
+            bottomText.text = "Floor Tiles Generated: " + Tiles.Count.ToString();
+            controlText.text = "Controls: Arrows to move camera, -/= to zoom out/zoom in. SPACE to stop generation.";
+        }
+        if(playerMove) {
+            bottomText2.text = "Player steps taken: " + myPlayer.mySteps.ToString();
+            controlText.text = "Controls: Arrows to move player. Find the exit (yellow). Red/Blue are compasses.";
+            }
+        else if(endgame == 1 || endgame == 2) {
+            controlText.text = "Controls: Arrows to move camera, -/= to zoom out/zoom in.";
+        }
+        else if(endgame == 3) {
+            controlText.text = "Controls: Arrows to move camera, -/= to zoom out/zoom in. C to play the map as a maze.";
+        }
+        else if(endgame == 4) {
+            controlText.text = "Controls: Arrows to move camera, -/= to zoom out/zoom in. R to restart map-building.";
         }
     }
 }

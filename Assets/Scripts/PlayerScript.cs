@@ -9,7 +9,7 @@ public class PlayerScript : MonoBehaviour
     public Camera myCamera;
     public Transform myShadow;
     public Transform Edge1, Edge2, Edge3, Edge4;
-    int mySteps;
+    public int mySteps;
     Ray2D lastRay;
     // Update is called once per frame
     void Update()
