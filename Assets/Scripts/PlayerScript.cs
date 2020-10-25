@@ -8,6 +8,8 @@ public class PlayerScript : MonoBehaviour
     public ManageRoom myManager;
     public Camera myCamera;
     public Transform myShadow;
+    public Transform Edge1, Edge2, Edge3, Edge4;
+    int mySteps;
     Ray2D lastRay;
     // Update is called once per frame
     void Update()
@@ -24,6 +26,11 @@ public class PlayerScript : MonoBehaviour
                         lastRay = myRay;
                         Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
+                        mySteps++;
+                        Edge1.position += transform.up;
+                        Edge2.position += transform.up;
+                        Edge3.position += transform.up;
+                        Edge4.position += transform.up;
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -39,6 +46,11 @@ public class PlayerScript : MonoBehaviour
                         lastRay = myRay;
                         Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
+                        mySteps++;
+                        Edge1.position += transform.up;
+                        Edge2.position += transform.up;
+                        Edge3.position += transform.up;
+                        Edge4.position += transform.up;
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -54,6 +66,11 @@ public class PlayerScript : MonoBehaviour
                         lastRay = myRay;
                         Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
+                        mySteps++;
+                        Edge1.position += transform.up;
+                        Edge2.position += transform.up;
+                        Edge3.position += transform.up;
+                        Edge4.position += transform.up;
                     }
                     Debug.Log(myRayHit.collider.ToString());
                 }
@@ -69,6 +86,11 @@ public class PlayerScript : MonoBehaviour
                         lastRay = myRay;
                         Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
+                        mySteps++;
+                        Edge1.position += transform.up;
+                        Edge2.position += transform.up;
+                        Edge3.position += transform.up;
+                        Edge4.position += transform.up;
                     }
                     Debug.Log(myRayHit.collider.ToString());
                     //Debug.Log(myManager.Tiles.Find(myRayHit.collider.transform).ToString());

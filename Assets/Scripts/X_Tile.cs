@@ -24,14 +24,14 @@ public class X_Tile : MonoBehaviour
         if(found) {
             float shift_percentage = 0;
             if(myExit.position.x > myPlayer.position.x) {
-                shift_percentage = ( myExit.position.x - transform.position.x ) / (maxX - transform.position.x );
+                shift_percentage = ( myExit.position.x - myPlayer.position.x ) / (maxX - myPlayer.position.x );
             }
             else if(myExit.position.x < myPlayer.position.x) {
-                shift_percentage = ( myExit.position.x - transform.position.x ) / ( transform.position.x - minX );
+                shift_percentage = ( myExit.position.x - myPlayer.position.x ) / ( myPlayer.position.x - minX );
             }
-            Debug.Log(shift_percentage.ToString());
-            transform.position = new Vector3(myCamera.transform.position.x, myCamera.transform.position.y + myCamera.orthographicSize - transform.localScale.y / 2, -5f);
-            CompassCenter.position = transform.position;
+            //Debug.Log(shift_percentage.ToString());
+            transform.position = new Vector3(myCamera.transform.position.x, myCamera.transform.position.y + myCamera.orthographicSize - transform.localScale.y / 2, -6f);
+            CompassCenter.position = transform.position ;
             transform.position += new Vector3(myCamera.orthographicSize * myCamera.aspect * shift_percentage, 0f, 0f);
         }
         

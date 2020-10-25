@@ -16,6 +16,7 @@ public class ManageRoom : MonoBehaviour
     public PlayerScript myPlayer;
     public Transform xKey, yKey;
     public Transform xCompCenter, yCompCenter;
+    public Transform Edge;
     public static int globalFloorCount;
     public bool playerMove;
     bool pause = false;//Used to keep track if the game is paused
@@ -61,6 +62,7 @@ public class ManageRoom : MonoBehaviour
             }
         }
         if( endgame == 1 ) {
+            if(myRooms.Count == 0) {
             for(int j = 0; j< 10; j++) {
             if(currentTile < Tiles.Count ) {
                 //For the current tile, create walls on all sides that raycasting finds null
@@ -80,7 +82,7 @@ public class ManageRoom : MonoBehaviour
                 wallShift.Add(ph_Vector);
                 myRay.Add(new Ray2D(Tiles[currentTile].position, ph_Vector.normalized));//135
                 for(int i = 0; i < myRay.Count; i++) {
-                    Debug.Log(myRay.Count.ToString());
+                    //Debug.Log(myRay.Count.ToString());
                     Debug.DrawRay(myRay[i].origin, myRay[i].direction);
                     RaycastHit2D myRayHit = Physics2D.Raycast(myRay[i].origin, myRay[i].direction, 1);
                     if(myRayHit.collider == null) {
@@ -93,12 +95,12 @@ public class ManageRoom : MonoBehaviour
                         Vector3 floorCheck = new Vector3(Tiles[currentTile].position.x, Tiles[currentTile].position.y, 0f);
                         float x = floorCheck.x - rayCheck.x;
                         if(x != 0 && x != 4 && x != -1 && x != 1) {
-                            Debug.Log(x.ToString());
                             //Transform myWall = Instantiate(wallPrefab, Tiles[currentTile].position + wallShift[i], Tiles[currentTile].rotation);
                         
                         }
                         //Need to figure out how to make corners regardless
                         //Going to try to do it with Physics2D.OverlapBox
+                        //Ended up not doing this, but keeping it here for reference
                     }
                 }
 
@@ -108,6 +110,7 @@ public class ManageRoom : MonoBehaviour
                 endgame = 2;
                 j = 50;
                 currentTile = 0;
+            }
             }
             }
         }
@@ -131,7 +134,6 @@ public class ManageRoom : MonoBehaviour
                 wallShift.Add(ph_Vector);
                 myRay.Add(new Ray2D(Tiles[currentTile].position, -transform.right));//180
                 for(int i = 0; i < myRay.Count; i++) {
-                    Debug.Log(myRay.Count.ToString());
                     Debug.DrawRay(myRay[i].origin, myRay[i].direction);
                     RaycastHit2D myRayHit = Physics2D.Raycast(myRay[i].origin, myRay[i].direction, 1);
                     if(myRayHit.collider == null) {
@@ -152,11 +154,49 @@ public class ManageRoom : MonoBehaviour
             if(!playerMove) {
                 //When you first press 'C', a finish point will be set, and the camera will zoom in on the player
                 playerMove = true;
-                myCamera.orthographicSize = 5;
+                int cSize = 0;
+                if(Tiles.Count < 500) {
+                    cSize = 5;
+                }
+                else if(Tiles.Count < 1000) {
+                    cSize = 6;
+                }
+                else if(Tiles.Count < 1500) {
+                    cSize = 7;
+                }
+                else if(Tiles.Count < 2000) {
+                    cSize = 8;
+                }
+                else if(Tiles.Count < 3500) {
+                    cSize = 9;
+                }
+                else if(Tiles.Count < 4250) {
+                    cSize = 10;
+                }
+                else if(Tiles.Count < 5000) {
+                    cSize = 11;
+                }
+                else {
+                    cSize = 12;
+                }
+                myCamera.orthographicSize = cSize;
+                //Also creates a border of sorts around the map, to make clear the player is playing
+                Vector3 edgePos = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y + myCamera.orthographicSize - 0.5f, -5f);
+                myPlayer.Edge1 = Instantiate(Edge, edgePos, Quaternion.Euler(0f, 0f, 0f));
+                edgePos = new Vector3(myPlayer.transform.position.x, myPlayer.transform.position.y - myCamera.orthographicSize + 0.5f, -5f);
+                myPlayer.Edge2 = Instantiate(Edge, edgePos, Quaternion.Euler(0f, 0f, 0f));
+                edgePos = new Vector3(myPlayer.transform.position.x + myCamera.orthographicSize*myCamera.aspect - 0.5f, myPlayer.transform.position.y, -5f);
+                myPlayer.Edge3 = Instantiate(Edge, edgePos, Quaternion.Euler(0f, 0f, 90f));
+                edgePos = new Vector3(myPlayer.transform.position.x - myCamera.orthographicSize*myCamera.aspect + 0.5f, myPlayer.transform.position.y, -5f);
+                myPlayer.Edge4 = Instantiate(Edge, edgePos, Quaternion.Euler(0f, 0f, 90f));
+                //Also creates a final spot + more depending on map size
                 int randomTileChoice = Random.Range(Mathf.RoundToInt(Tiles.Count / 3 * 2), Tiles.Count-1);
                 SpriteRenderer tileSprite = Tiles[randomTileChoice].gameObject.GetComponent<SpriteRenderer>();
                 tileSprite.color = Color.yellow;
-                Tiles[randomTileChoice].gameObject.AddComponent<TileEnd>();
+                tileSprite.transform.position += new Vector3(0f, 0f, -1f);
+                TileEnd myTileEnd = Tiles[randomTileChoice].gameObject.AddComponent<TileEnd>();
+                myTileEnd.myPlayer = myPlayer;
+                myTileEnd.myManager = this;
                 if(Tiles.Count > 500) {
                     randomTileChoice = Random.Range(Mathf.RoundToInt(Tiles.Count / 4), Tiles.Count -1);
                     Transform myX = Instantiate(xKey, Tiles[randomTileChoice].position + new Vector3(0f, 0f, -1f), transform.rotation);
@@ -226,12 +266,12 @@ public class ManageRoom : MonoBehaviour
             }
             if(Input.GetKey(KeyCode.Minus)) {
                 if(cameraSizeControl < maxCameraSizeControl) {
-                    cameraSizeControl += Time.deltaTime;
+                    cameraSizeControl += Time.deltaTime * 3f;
                 }
             }
             if(Input.GetKey(KeyCode.Equals)) {
                 if(cameraSizeControl > minCameraSizeControl) {
-                    cameraSizeControl -= Time.deltaTime;
+                    cameraSizeControl -= Time.deltaTime * 3f;
                 }
             }
             //myCamera.transform.position = new Vector3((camera_max_x +camera_min_x) / 2, (camera_max_y + camera_min_y) / 2, -10f);

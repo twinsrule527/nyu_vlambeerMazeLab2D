@@ -29,13 +29,13 @@ public class Y_Tile : MonoBehaviour
         if(found == 1) {
             float shift_percentage = 0;
             if(myExit.position.y > myPlayer.position.y) {
-                shift_percentage = ( myExit.position.y - transform.position.y ) / (maxY - transform.position.y );
+                shift_percentage = ( myExit.position.y - myPlayer.position.y ) / (maxY - myPlayer.position.y );
             }
             else if(myExit.position.y < myPlayer.position.y) {
-                shift_percentage = ( myExit.position.y - transform.position.y ) / ( transform.position.y - minY );
+                shift_percentage = ( myExit.position.y - myPlayer.position.y ) / ( myPlayer.position.y - minY );
             }
-            Debug.Log(shift_percentage.ToString());
-            transform.position = new Vector3(myCamera.transform.position.x + myCamera.orthographicSize * myCamera.aspect - transform.localScale.x / 2, myCamera.transform.position.y, -5f);
+            //Debug.Log(shift_percentage.ToString());
+            transform.position = new Vector3(myCamera.transform.position.x + myCamera.orthographicSize * myCamera.aspect - transform.localScale.x / 2, myCamera.transform.position.y, -6f);
             CompassCenter.position = transform.position;
             transform.position += new Vector3(0f, myCamera.orthographicSize  * shift_percentage, 0f);
         }

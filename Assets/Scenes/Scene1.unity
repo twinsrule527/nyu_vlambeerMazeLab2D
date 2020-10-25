@@ -238,7 +238,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -413,6 +413,7 @@ MonoBehaviour:
   yKey: {fileID: 2200950653624954524, guid: ce5708c7199a704478a9b6ab42577dd5, type: 3}
   xCompCenter: {fileID: 303842383}
   yCompCenter: {fileID: 1621287380}
+  Edge: {fileID: 8346575490165234953, guid: 75d39487717a10946a24a14065df62e0, type: 3}
   playerMove: 0
   endgame: 0
   baseCameraSize: 15
@@ -588,8 +589,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794725444}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -611,3 +612,7 @@ MonoBehaviour:
   myCamera: {fileID: 694350452}
   myShadow: {fileID: 6774644218414253933, guid: 4c6031a32782b214990cbe130b864c23,
     type: 3}
+  Edge1: {fileID: 0}
+  Edge2: {fileID: 0}
+  Edge3: {fileID: 0}
+  Edge4: {fileID: 0}

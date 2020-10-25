@@ -110,10 +110,16 @@ public class HallwayMaker : MonoBehaviour
 //			Increment counter;
 			myCounter++;
 			globalFloorCount++;
+            Debug.Log(globalFloorCount.ToString());
             hallLength++;
         }
         else {
             myManager.myHallways.Remove(this);
+            Destroy(this.gameObject);
+        }
+        if(globalFloorCount >= 5000f && !clone) {
+            myManager.myHallways.Remove(this);
+            myManager.endgame = 1;
             Destroy(this.gameObject);
         }
     }
