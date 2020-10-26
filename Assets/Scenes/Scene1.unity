@@ -603,6 +603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1594922709}
   - component: {fileID: 1594922708}
+  - component: {fileID: 1594922710}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -628,6 +629,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 6311603397245513716, guid: e568bfafdfac07a4bb0143dadd97385f,
     type: 3}
   Walls: []
+  myTileTracker: {fileID: 1594922710}
   startHallway: {fileID: 1292803397}
   myCamera: {fileID: 694350452}
   myPlayer: {fileID: 1794725447}
@@ -658,6 +660,83 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1594922710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594922707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48f1ebc314e5f04bae6d10faeac3646, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorTileSprite:
+  - {fileID: 1686116908373297790, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 7795186679587059445, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: -888074322883568031, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 7529643488385575180, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: -5127387571124265348, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: -5946627182132047373, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: -4600121737125525971, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 2634786822372059771, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 3012532377064879327, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 7484974657084091393, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 7641213497014788031, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 1322924347454977152, guid: 8751a2fa737727b4291f0607df10c60e, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1621287379
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class ManageRoom : MonoBehaviour
     public List<Transform> Tiles = new List<Transform>();
     public Transform wallPrefab;
     public List<Transform> Walls = new List<Transform>();
+    public TileTracker myTileTracker;
     public HallwayMaker startHallway;
     public Camera myCamera;
     public PlayerScript myPlayer;
@@ -67,7 +68,15 @@ public class ManageRoom : MonoBehaviour
         }
         if( endgame == 1 ) {
             if(myRooms.Count == 0) {
-            for(int j = 0; j< 10; j++) {
+            int repetition = 0;
+            if(Tiles.Count <= 5000) {
+                repetition = Mathf.RoundToInt(Tiles.Count / 100f);
+            }
+            else {
+                repetition = 50;
+            }
+            repetition++;
+            for(int j = 0; j< repetition; j++) {
             if(currentTile < Tiles.Count ) {
                 //For the current tile, create walls on all sides that raycasting finds null
                 List<Ray2D> myRay = new List<Ray2D>();
@@ -119,7 +128,15 @@ public class ManageRoom : MonoBehaviour
             }
         }
         else if(endgame == 2) {
-            for(int j = 0; j< 10; j++) {
+            int repetition = 0;
+            if(Tiles.Count <= 5000) {
+                repetition = Mathf.RoundToInt(Tiles.Count / 100f);
+            }
+            else {
+                repetition = 50;
+            }
+            repetition++;
+            for(int j = 0; j< repetition; j++) {
             if(currentTile < Tiles.Count ) {
                 List<Ray2D> myRay = new List<Ray2D>();
                 List<Vector3> wallShift = new List<Vector3>();

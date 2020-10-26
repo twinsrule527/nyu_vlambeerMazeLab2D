@@ -30,6 +30,8 @@ public class RoomMaker : MonoBehaviour
     {
     if(!pause) {
         Transform Tile = Instantiate(floorPrefab, transform.position, transform.rotation);
+        FloorTileSpriter tileSpriter = Tile.GetComponent<FloorTileSpriter>();
+        tileSpriter.myManager = myManager;
         myManager.Tiles.Add( Tile );
 		//Moves along creating a room
 		if(x == 0 && y == 0) {

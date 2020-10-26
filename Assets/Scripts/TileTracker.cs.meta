@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: a48f1ebc314e5f04bae6d10faeac3646
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - floorTile0: {fileID: 1686116908373297790, guid: 8751a2fa737727b4291f0607df10c60e,
+      type: 3}
+  - floorTile1: {fileID: 7484974657084091393, guid: 8751a2fa737727b4291f0607df10c60e,
+      type: 3}
+  - floorTile2: {instanceID: 0}
+  - floorTile3: {instanceID: 0}
+  - floorTile4: {instanceID: 0}
+  - floorTile5: {instanceID: 0}
+  - floorTile6: {instanceID: 0}
+  - floorTile7: {instanceID: 0}
+  - floorTile8: {instanceID: 0}
+  - floorTile9: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

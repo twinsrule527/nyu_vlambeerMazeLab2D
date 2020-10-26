@@ -24,7 +24,7 @@ public class PlayerScript : MonoBehaviour
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        Instantiate(myShadow, new Vector3(transform.position.x, transform.position.y,-2f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                         mySteps++;
                         Edge1.position += transform.up;
@@ -44,7 +44,7 @@ public class PlayerScript : MonoBehaviour
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        Instantiate(myShadow, new Vector3(transform.position.x, transform.position.y,-2f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                         mySteps++;
                         Edge1.position += transform.up;
@@ -64,7 +64,7 @@ public class PlayerScript : MonoBehaviour
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        Instantiate(myShadow, new Vector3(transform.position.x, transform.position.y,-2f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                         mySteps++;
                         Edge1.position += transform.up;
@@ -84,7 +84,7 @@ public class PlayerScript : MonoBehaviour
                     Vector2 posCheck = new Vector2(transform.position.x, transform.position.y);
                     if(rayCheck == posCheck) {
                         lastRay = myRay;
-                        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+                        Instantiate(myShadow, new Vector3(transform.position.x, transform.position.y,-2f), transform.rotation);
                         transform.position = myRayHit.transform.position + new Vector3(0f, 0f, -5f);
                         mySteps++;
                         Edge1.position += transform.up;

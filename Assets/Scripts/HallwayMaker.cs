@@ -104,6 +104,8 @@ public class HallwayMaker : MonoBehaviour
 //			// end elseIf
 //			Instantiate a floorPrefab clone at current position;
 			Transform Tile = Instantiate(floorPrefab, transform.position, transform.rotation);
+            FloorTileSpriter tileSpriter = Tile.GetComponent<FloorTileSpriter>();
+            tileSpriter.myManager = myManager;
             myManager.Tiles.Add( Tile );
 //			Move 1 unit "upwards" based on this object's local rotation (e.g. with rotation 0,0,0 "upwards" is (0,1,0)... but with rotation 0,0,180 then "upwards" is (0,-1, 0)... )
 			transform.position += transform.up;
