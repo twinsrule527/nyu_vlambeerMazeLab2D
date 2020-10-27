@@ -79,6 +79,7 @@ public class ManageRoom : MonoBehaviour
             for(int j = 0; j< repetition; j++) {
             if(currentTile < Tiles.Count ) {
                 //For the current tile, create walls on all sides that raycasting finds null
+                //Tiles[currentTile].eulerAngles = new Vector3(0f, 0f, 0f);
                 List<Ray2D> myRay = new List<Ray2D>();
                 List<Vector3> wallShift = new List<Vector3>();
                 //Adds the 8 rays around the square: up, right, down, left, up-right, up-left, right-down, left-down
@@ -213,7 +214,8 @@ public class ManageRoom : MonoBehaviour
                 //Also creates a final spot + more depending on map size
                 int randomTileChoice = Random.Range(Mathf.RoundToInt(Tiles.Count / 3 * 2), Tiles.Count-1);
                 SpriteRenderer tileSprite = Tiles[randomTileChoice].gameObject.GetComponent<SpriteRenderer>();
-                tileSprite.color = Color.yellow;
+                tileSprite.sprite = myTileTracker.floorTileSprite[63];
+                //tileSprite.color = Color.yellow;
                 tileSprite.transform.position += new Vector3(0f, 0f, -1f);
                 TileEnd myTileEnd = Tiles[randomTileChoice].gameObject.AddComponent<TileEnd>();
                 myTileEnd.myPlayer = myPlayer;
@@ -287,12 +289,12 @@ public class ManageRoom : MonoBehaviour
             }
             if(Input.GetKey(KeyCode.Minus)) {
                 if(cameraSizeControl < maxCameraSizeControl) {
-                    cameraSizeControl += Time.deltaTime * 2f;
+                    cameraSizeControl += Time.deltaTime * 1.5f;
                 }
             }
             if(Input.GetKey(KeyCode.Equals)) {
                 if(cameraSizeControl > minCameraSizeControl) {
-                    cameraSizeControl -= Time.deltaTime * 2f;
+                    cameraSizeControl -= Time.deltaTime * 1.5f;
                 }
             }
             //myCamera.transform.position = new Vector3((camera_max_x +camera_min_x) / 2, (camera_max_y + camera_min_y) / 2, -10f);

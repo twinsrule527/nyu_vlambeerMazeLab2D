@@ -20,16 +20,13 @@ public class FloorTileSpriter : MonoBehaviour
         else if(rnd < 0.4f) {
             mySprite.sprite = myTile.floorTileSprite[1];
         }
-        else if(rnd < 0.5f) {
+        else if(rnd < 0.525f) {
             mySprite.sprite = myTile.floorTileSprite[2];
         }
-        else if(rnd < 0.6f) {
+        else if(rnd < 0.65f) {
             mySprite.sprite = myTile.floorTileSprite[3];
         }
-        else if(rnd < 0.7f) {
-            mySprite.sprite = myTile.floorTileSprite[4];
-        }
-        else if(rnd < 0.8f) {
+        else if(rnd < 0.85f) {
             float rnd2 = Random.Range(0f, 1f);
             if(rnd2 < 0.25f) {
                 mySprite.sprite = myTile.floorTileSprite[5];
@@ -44,7 +41,7 @@ public class FloorTileSpriter : MonoBehaviour
                 mySprite.sprite = myTile.floorTileSprite[8];
             }
         }
-        else if(rnd < 0.9f) {
+        else if(rnd < 0.925f) {
             float rnd2 = Random.Range(0f, 1f);
             if( rnd2 < 0.5f) {
                 mySprite.sprite = myTile.floorTileSprite[9];
@@ -53,8 +50,44 @@ public class FloorTileSpriter : MonoBehaviour
                 mySprite.sprite = myTile.floorTileSprite[10];
             }
         }
+        else if(rnd < 0.975f) {
+            mySprite.sprite = myTile.floorTileSprite[4];
+        }
         else {
-            mySprite.sprite = myTile.floorTileSprite[11];
+            float rnd2 = Random.Range(0f, 1f);
+            if( rnd2 < 1f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[11];
+            }
+            else if( rnd2 < 2f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[12];
+            }
+            else if( rnd2 < 3f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[13];
+            }
+            else if( rnd2 < 4f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[14];
+            }
+            else if( rnd2 < 5f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[15];
+            }
+            else if( rnd2 < 6f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[16];
+            }
+            else if( rnd2 < 7f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[17];
+            }
+            else if( rnd2 < 8f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[18];
+            }
+            else if( rnd2 < 9f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[19];
+            }
+            else if( rnd2 < 10f / 11f) {
+                mySprite.sprite = myTile.floorTileSprite[20];
+            }
+            else {
+                mySprite.sprite = myTile.floorTileSprite[21];
+            }
         }
         Destroy(this);
     }

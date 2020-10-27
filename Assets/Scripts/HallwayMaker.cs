@@ -104,6 +104,7 @@ public class HallwayMaker : MonoBehaviour
 //			// end elseIf
 //			Instantiate a floorPrefab clone at current position;
 			Transform Tile = Instantiate(floorPrefab, transform.position, transform.rotation);
+            Tile.eulerAngles = new Vector3(0f, 0f, 0f);
             FloorTileSpriter tileSpriter = Tile.GetComponent<FloorTileSpriter>();
             tileSpriter.myManager = myManager;
             myManager.Tiles.Add( Tile );

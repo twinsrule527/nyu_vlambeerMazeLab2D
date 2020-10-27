@@ -17,7 +17,7 @@ public class X_Tile : MonoBehaviour
     public bool found = false;
     void Update()
     {
-        if( myPlayer.position.x == transform.position.x && myPlayer.position.y == transform.position.y ) {
+        if( (myPlayer.position.x + 0.5f > transform.position.x && myPlayer.position.x - 0.5f < transform.position.x) && (myPlayer.position.y + 0.5f > transform.position.y && myPlayer.position.y - 0.5f < transform.position.y) ) {
             found = true;
             mySprite.sprite = Arrow;
         }
@@ -33,6 +33,14 @@ public class X_Tile : MonoBehaviour
             transform.position = new Vector3(myCamera.transform.position.x, myCamera.transform.position.y + myCamera.orthographicSize - transform.localScale.y / 2, -6f);
             CompassCenter.position = transform.position ;
             transform.position += new Vector3(myCamera.orthographicSize * myCamera.aspect * shift_percentage, 0f, 0f);
+        }
+        if(myManager.endgame == 4) {
+            if(CompassCenter != null) {
+                Destroy(CompassCenter.gameObject);
+            }
+            if(found) {
+                Destroy(this.gameObject);
+            }
         }
         
     }

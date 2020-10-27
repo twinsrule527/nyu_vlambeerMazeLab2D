@@ -21,10 +21,10 @@ public class Y_Tile : MonoBehaviour
     int found = 0;
     void Update()
     {
-        if( myPlayer.position.x == transform.position.x && myPlayer.position.y == transform.position.y ) {
+        if( (myPlayer.position.x + 0.5f > transform.position.x && myPlayer.position.x - 0.5f < transform.position.x) && (myPlayer.position.y + 0.5f > transform.position.y && myPlayer.position.y - 0.5f < transform.position.y) ) {
             found = 1;
             mySprite.sprite = Arrow;
-            transform.eulerAngles = new Vector3(0f, 0f, -90f);
+            //transform.eulerAngles = new Vector3(0f, 0f, -90f);
         }
         if(found == 1) {
             float shift_percentage = 0;
@@ -55,6 +55,14 @@ public class Y_Tile : MonoBehaviour
                 Destroy(myXCompass.gameObject);
                 mySprite.color = Color.magenta;
                 found = 2;
+            }
+        }
+        if(myManager.endgame == 4) {
+            if(CompassCenter != null) {
+                Destroy(CompassCenter.gameObject);
+            }
+            if(found >= 1) {
+                Destroy(this.gameObject);
             }
         }
     }

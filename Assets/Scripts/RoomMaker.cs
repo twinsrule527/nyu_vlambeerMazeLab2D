@@ -33,6 +33,7 @@ public class RoomMaker : MonoBehaviour
         FloorTileSpriter tileSpriter = Tile.GetComponent<FloorTileSpriter>();
         tileSpriter.myManager = myManager;
         myManager.Tiles.Add( Tile );
+        Tile.eulerAngles = new Vector3(0f, 0f, 0f);
 		//Moves along creating a room
 		if(x == 0 && y == 0) {
 			transform.position-= transform.right * roomOffset;
