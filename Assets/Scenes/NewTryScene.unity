@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -5384,6 +5384,9 @@ MonoBehaviour:
     type: 3}
   exitPos: -1
   exitTile: {fileID: 11400000, guid: e19cda5cc0090d14e9e1ced6043110c1, type: 2}
+  myHallwayMakerPrefab: {fileID: 0}
+  myCanvas: {fileID: 0}
+  myValueTracker: {fileID: 0}
 --- !u!4 &1833069587
 Transform:
   m_ObjectHideFlags: 0
