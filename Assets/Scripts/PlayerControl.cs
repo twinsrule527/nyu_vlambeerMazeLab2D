@@ -53,6 +53,8 @@ public class PlayerControl : MonoBehaviour
     }
     //This is called regardless of which direction you are pointing, so that you attempt to move in that direction
     void Move() {
+        //Always places a Shadow at its position
+        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
         //Checks the tile immediately in front of the player
         //Gets a Vector3Int of pos in front of the player:
         Vector3 posIntermediary = transform.position + transform.up;
@@ -62,7 +64,7 @@ public class PlayerControl : MonoBehaviour
         //After getting the integer position of the tile in the list, we can compare it to the TileType List
         if(tilePosNum != 0) {//Doublechecking that the tile exists
             //IF the tileType is not wall, we can pass through
-            if(myManager.floorTileType[tilePosNum]) {
+            if(myManager.floorTileType[tilePosNum] != 0) {
                 //Move forward
                 transform.position += transform.up;
                 myCamera.transform.position += transform.up;

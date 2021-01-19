@@ -27,6 +27,11 @@ public class RoomTileMaker : MonoBehaviour
 
         //This is added to the Manager's Room List
         myManager.myRooms.Add(this);
+        //Need to add a Quaternion of the room's position/size to the Manager's true room List
+        //These two positions are going to be changed to be the bottom left corner of the Room
+        float xPos = 0;
+        float yPos = 0;
+        myManager.roomList.Add(new Quaternion(xPos, yPos, roomWidth, roomHeight));
 
     }
 
@@ -38,8 +43,36 @@ public class RoomTileMaker : MonoBehaviour
             if(floorTilemap.GetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0)) == null) { 
                 floorTilemap.SetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0), floorTile);
                 myManager.floorTilePos.Add(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0)); // Add the tile to the manager object
-                myManager.floorTileType.Add(true);//The tile added is a floor tile
+                
+                //The tile is added to the Manager List of Floor Tiles
+                //If it is on the edge, -2 is added (a roomEdge)
+                if(x == 0 || y == 0 || x == roomWidth || y == roomHeight) {
+                    myManager.floorTileType.Add(-2);
+                }
+                //Otherwise, a -1 is added (normal Room Tile)
+                else {
+                    myManager.floorTileType.Add(-1);//The tile added is a floor tile
+                }
                 globalFloorCount++;
+            }
+            else {
+                //Otherwise, it replaces that tile with the correct room tile
+                //Get the position in the list of the tile it is on
+                int posCheck = myManager.floorTilePos.IndexOf(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0));
+                //Make sure the position exists
+                if(posCheck != -1) {
+                    //Only replaces hallways
+                    if(myManager.floorTileType[posCheck] > 0) {
+                        //If it is an edge, that position in the list is made to be a room edge
+                        if(x == 0 || y == 0 || x == roomWidth || y == roomHeight) {
+                            myManager.floorTileType[posCheck] = -2;
+                        }
+                        else {
+                            //Otherwise, it is a normal room tile
+                            myManager.floorTileType[posCheck] = -1;
+                        }
+                    }
+                }
             }
             //It moves along 1 in the correct direction (x-axis), or moves all the way over to the next layer
             //If it is in its first spot, it will move all the way over to its start
@@ -53,7 +86,7 @@ public class RoomTileMaker : MonoBehaviour
                     floorTilemap.SetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0), floorTile);
                     //Adds the tile to the manager script
                     myManager.floorTilePos.Add(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0)); // Add the tile to the manager object
-                    myManager.floorTileType.Add(true);//The tile added is a floor tile
+                    myManager.floorTileType.Add(-1);//The tile added is a floor tile
                     globalFloorCount++;
                 }
             }

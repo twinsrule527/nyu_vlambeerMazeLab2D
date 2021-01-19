@@ -19,22 +19,38 @@ public class ValueTracker : MonoBehaviour
     public void changeMinHallwayStraightLength() {
         //The slider cahnges the variable's value
         minHallwayStraightLength = Mathf.RoundToInt(minHallwayStraightLengthSlider.value);
+        if(minHallwayStraightLength > maxHallwayStraightLength) {
+            maxHallwayStraightLength = minHallwayStraightLength;
+            maxHallwayStraightLengthSlider.value = maxHallwayStraightLength;
+        }
     }
     public int maxHallwayStraightLength;//The point at which the hallway will immediately have to turn (50 = no Maximum)
     public Slider maxHallwayStraightLengthSlider;
     public void changeMaxHallwayStraightLength() {
         //A value of 50 = infinity
         maxHallwayStraightLength = Mathf.RoundToInt(maxHallwayStraightLengthSlider.value);
+        if(minHallwayStraightLength > maxHallwayStraightLength) {
+            minHallwayStraightLength = maxHallwayStraightLength;
+            minHallwayStraightLengthSlider.value = maxHallwayStraightLength;
+        }
     }
     public int minMaxHallwayLength;//The minimum length a hallway clone will be before destroying itself
     public Slider minMaxHallwayLengthSlider;
     public void changeMinMaxHallwayLength() {
         minMaxHallwayLength = Mathf.RoundToInt(minMaxHallwayLengthSlider.value);
+        if(minMaxHallwayLength > maxMaxHallwayLength) {
+            maxMaxHallwayLength = minMaxHallwayLength;
+            maxMaxHallwayLengthSlider.value = minMaxHallwayLength;
+        }
     }
     public int maxMaxHallwayLength;//The longest length a hallway clone can be before destroying itself
     public Slider maxMaxHallwayLengthSlider;
     public void changeMaxMaxHallwayLength() {
         maxMaxHallwayLength = Mathf.RoundToInt(maxMaxHallwayLengthSlider.value);
+        if(maxMaxHallwayLength < minMaxHallwayLength) {
+            minMaxHallwayLength = maxMaxHallwayLength;
+            minMaxHallwayLengthSlider.value = maxMaxHallwayLength;
+        }
     }
     public float hallwayEndRoomGeneratePercent;//The probability that a hallway Clone will create a room when it is destroyed
     public Slider hallwayEndRoomGenerateSlider;
@@ -74,6 +90,21 @@ public class ValueTracker : MonoBehaviour
     public void changeTimeTrackerOn() {
         timeTrackerOn = !timeTrackerOn;
     }
+    public bool jogTurnOn;//Whether Hallways can job over 1 block when turning
+    public void chanceJogTurnOn() {
+        jogTurnOn = !jogTurnOn;
+        //Enables the Jog Turn slider to only appear if jog turns are turned on
+        jogTurnSlider.enabled = jogTurnOn;
+    }
+    public float jogTurnPercent;//How likely it is for a hallway to jog over on any given moment (separate from normal turns)
+    public Slider jogTurnSlider;
+    public void changeJogTurnPercent() {
+        jogTurnPercent = jogTurnSlider.value;
+    }
+    public bool roomOverlapOn;//Declares whether or not rooms can overlap. If turned off, room makes will not spawn while the halway maker is standing over a room tile
+    public void changeRoomOverlapOn() {
+        roomOverlapOn = !roomOverlapOn;
+    }
     void Start()
     {
         //At the start, all values are set to be equal to that of the slider
@@ -87,7 +118,9 @@ public class ValueTracker : MonoBehaviour
         maxRoomSize = Mathf.RoundToInt(maxRoomSizeSlider.value);
         hallwayTurnPercent = hallwayTurnSlider.value;
         roomGeneratePercent = roomGenerateSlider.value;
-        hallwayGeneratePercent = hallwayEndRoomGenerateSlider.value;
+        hallwayGeneratePercent = hallwayGenerateSlider.value;
+        jogTurnPercent = jogTurnSlider.value;
+
     }
 
     void Update()

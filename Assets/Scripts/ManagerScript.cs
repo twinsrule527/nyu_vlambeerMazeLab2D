@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 //PURPOSE: Manages other scripts and objects
 //USAGE: Attached to an empty manager object that has reference to all other objects
 public class ManagerScript : MonoBehaviour
 {
     //A list of positions for each floor tile. There will be a corresponding list of enumerators for what the tiles do
     public List<Vector3Int> floorTilePos = new List<Vector3Int>();
-    public List<bool> floorTileType = new List<bool>();//Will eventually be a list of enumerators, at the moment only checks to see if this position is a floor tile
+    public List<int> floorTileType = new List<int>();//Will eventually be a list of enumerators, at the moment only checks to see if this position is a floor tile
+    //0 = Wall, negative numbers = room, positive numbers = hallway
     //Need to create an Enum for this
 
     //These two lists below keep track of all of the hallways/rooms that still are being made
@@ -26,6 +28,7 @@ public class ManagerScript : MonoBehaviour
     public HallwayTileMaker myHallwayMakerPrefab;//Used to create the first HallwayMaker in the game
     public Canvas myCanvas;//References the canvas so it can turn it off at the right time
     public ValueTracker myValueTracker;//Uses the script which keeps track of all values
+    public List<Quaternion> roomList = new List<Quaternion>();//This is a list of Rooms - first two values are the x and y position of the lower left corner of the room, while z and w are the width and height of the room
     void Start()
     {
         
@@ -35,9 +38,22 @@ public class ManagerScript : MonoBehaviour
     {
         if(endgame == 1) {
             if(myRooms.Count == 0 && myHallways.Count == 0 ) {
-                endgame = 0;
+                endgame = 2;
                 buildWalls();
             }
+        }
+        else if(endgame == 2) {
+            //This is when Rooms are actually built, and everything is put in the rooms
+            //At the moment though, just builds walls separating rooms
+            buildRoomWalls();
+            endgame = 3;
+        }
+        else if(endgame == 3) {  
+            playerSetup();
+            endgame = 0;
+        }
+        if(endgame == 0 && Input.GetKeyDown(KeyCode.R)) {
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -46,20 +62,19 @@ public class ManagerScript : MonoBehaviour
         int build = 0;
         while(build < floorTilePos.Count) {
             //If this position tile is a floor tile, it builds walls
-            if(floorTileType[build]) {
+            if(floorTileType[build] != 0 ) {
                 //Builds in each direction, relative to the script's List of directions
                 for(int i = 0; i< cardinalDirection.Count; i++) {
                     //If there is no tile on the existing spot, it builds a wall
                     if(floorTilemap.GetTile(floorTilePos[build] + cardinalDirection[i]) == null) {
                         floorTilemap.SetTile(floorTilePos[build] + cardinalDirection[i], wallTile);
                         floorTilePos.Add(floorTilePos[build] + cardinalDirection[i]);
-                        floorTileType.Add(false);
+                        floorTileType.Add(0);
                     }
                 }
             }    
             build++;
         }
-        playerSetup();
     }
     //Sets up everything for the player
     void playerSetup() {
@@ -75,7 +90,7 @@ public class ManagerScript : MonoBehaviour
         //First, get a list of all possible tiles
         List<int> floorList = new List<int>();
         for(int i = 0; i< floorTileType.Count; i++) {
-            if(floorTileType[i]) {
+            if(floorTileType[i] != 0) {
                 floorList.Add(i);
             }
         }
@@ -102,7 +117,21 @@ public class ManagerScript : MonoBehaviour
         baseHallwayMaker.endRoomGeneratePercent = myValueTracker.hallwayEndRoomGeneratePercent;
         baseHallwayMaker.minHallwayLength = myValueTracker.minMaxHallwayLength;
         baseHallwayMaker.maxHallwayLength = myValueTracker.maxMaxHallwayLength;
+        baseHallwayMaker.JogTurns = myValueTracker.jogTurnOn;
+        baseHallwayMaker.jogTurnPercent = myValueTracker.jogTurnPercent;
         baseHallwayMaker.myManager = this;
         baseHallwayMaker.floorTilemap = floorTilemap;
     }
+    void buildRoomWalls() {
+        for(int i =0; i < floorTilePos.Count; i++) {
+            //Only if it is a room edge does it test things
+            if(floorTileType[i] == -2) {
+                if((floorTileType[floorTilePos.IndexOf(floorTilePos[i] + new Vector3Int(1, 0, 0))] < 0 && floorTileType[floorTilePos.IndexOf(floorTilePos[i] + new Vector3Int(-1, 0, 0))] == -1) || (floorTileType[floorTilePos.IndexOf(floorTilePos[i] + new Vector3Int(0, 1, 0))] == -1 && floorTileType[floorTilePos.IndexOf(floorTilePos[i] + new Vector3Int(0, -1, 0))] < 0)) {
+                    floorTilemap.SetTile(floorTilePos[i], wallTile);
+                    floorTileType[i] = 0;
+                }
+            }
+        }
+    }
+
 }

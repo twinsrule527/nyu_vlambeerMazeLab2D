@@ -31,6 +31,8 @@ public class HallwayTileMaker : MonoBehaviour
     //The two below are only used for Clones, to see how long they live for
     public int minHallwayLength;//When a clone, the minimum length this hallway maker can be
     public int maxHallwayLength;//See minHallwayLength
+    public bool JogTurns;//Whether the hallway can jog over 1 block while moving
+    public float jogTurnPercent;//Chance for it to make a jog of a turn
     void Start()
     {
         //This is added to the Manager object's list of Hallways
@@ -103,6 +105,9 @@ public class HallwayTileMaker : MonoBehaviour
                     myClone.maxHallwayLength = maxHallwayLength;
                     myClone.minHallLength = minHallLength;
                     myClone.maxHallLength = maxHallLength;
+                    myClone.JogTurns = JogTurns;
+                    myClone.jogTurnPercent = jogTurnPercent;
+                    myClone.clone = true;
                     //The clone is also rotated and pushed forward in some direction
                     float rnd2 = Random.Range(0f, 1f);
                     if(rnd2 < 0.5f) {
@@ -120,8 +125,29 @@ public class HallwayTileMaker : MonoBehaviour
                 }
                 //...Else it has a small chance of creating a room
                 else if(rnd < turnPercent + hallwayGeneratePercent + roomGeneratePercent) {
-                    
+                    //First, needs to check if it can create a room:
+                        //1 of 2 conditions need to be met: either roomOverlap needs to be allowed, or the tileMaker needs to not be on a room/roomEdge Tile
+                    bool createAllowed = true;
+                    if(myManager.myValueTracker.roomOverlapOn) {
+                        createAllowed = true;
+                    }
+                    else {
+                        //Finds the corresponding tile in the List of Tile positions
+                        for(int i =0; i < minRoomSize; i++) {
+                            int posCheck = myManager.floorTilePos.IndexOf(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0) + Vector3Int.RoundToInt(transform.up * i));
+                            if(posCheck > -1) {
+                                //Uses that position to check the tileType
+                                if(myManager.floorTileType[posCheck] < 0) {
+                                    //If the tileType is negative, it is part of a room, and...
+                                    //...if overlap is not allowed, no RoomTileMaker can be placed
+                                    createAllowed = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     //Creates a new RoomTileMaker
+                    if(createAllowed) {//A secondary check to double check regarding roomOverlap
                     RoomTileMaker myCloneRoom = Instantiate(roomMakerPrefab, transform.position, transform.rotation);
                     myCloneRoom.floorTilemap = floorTilemap;
                     myCloneRoom.myManager = myManager;//The clone Room's manager becomes this
@@ -147,6 +173,9 @@ public class HallwayTileMaker : MonoBehaviour
                             myClone.maxHallwayLength = maxHallwayLength;
                             myClone.minHallLength = minHallLength;
                             myClone.maxHallLength = maxHallLength;
+                            myClone.JogTurns = JogTurns;
+                            myClone.jogTurnPercent = jogTurnPercent;
+                            myClone.clone = true;
 				            //The clone will also be rotated and pushed forward
 				            float randomNumber2 = Random.Range(0.0f, 100f);
 				            if(randomNumber2 < 50f) {
@@ -160,7 +189,30 @@ public class HallwayTileMaker : MonoBehaviour
 				            //hallLength += 4;
                             }
                     }
+                    }
                     
+                }
+                //Might have a chance to jog over, if jogging over is turned on
+                else if(JogTurns && rnd < turnPercent + hallwayGeneratePercent + roomGeneratePercent + jogTurnPercent) {
+                    //Creates a tile, then moves over, either to the left or the right
+                    if(floorTilemap.GetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0)) == null) {
+                        floorTilemap.SetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0), floorTile);
+                    
+                        //The tile is added to the tile manager (which will also deal with special traits of tiles)
+                        myManager.floorTilePos.Add(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0));
+                        myManager.floorTileType.Add(1);
+                    
+                        //Global floor count only increases if a new tile is placed
+                        globalFloorCount++;
+                    }
+                    //50% chance to jog right, 50% to jog left
+                    float rnd2 = Random.Range(0f, 1f);
+                    if(rnd2 < 0.5f) {
+                        transform.position += transform.right;
+                    }
+                    else {
+                        transform.position -= transform.right;
+                    }
                 }
                 //Next, the tile creates the floor tile and moves forward
                 //But only if the tile is not filled already
@@ -169,7 +221,7 @@ public class HallwayTileMaker : MonoBehaviour
                     
                     //The tile is added to the tile manager (which will also deal with special traits of tiles)
                     myManager.floorTilePos.Add(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0));
-                    myManager.floorTileType.Add(true);
+                    myManager.floorTileType.Add(1);
                     
                     //Global floor count only increases if a new tile is placed
                     globalFloorCount++;
