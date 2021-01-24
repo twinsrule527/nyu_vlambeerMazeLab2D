@@ -21,6 +21,7 @@ public class ManagerScript : MonoBehaviour
     public List<Vector3Int> cardinalDirection = new List<Vector3Int>();//A cheap and easy way to get directions for when placing walls
     public int endgame;//Where the map building is, stage-wise
     public bool playerMove;//Determines whether the player should be able to move
+    public Canvas playerCanvasManager;//Keeps track of the canvas manager that exists with the player, to enable it when the time comes
     public Camera myCamera;//Reference to the main camera
     public PlayerControl myPlayerPrefab;//A prefab to spawn in the player when the time comes
     public int exitPos;//Declares which tile in the List is an exit tile
@@ -29,6 +30,8 @@ public class ManagerScript : MonoBehaviour
     public Canvas myCanvas;//References the canvas so it can turn it off at the right time
     public ValueTracker myValueTracker;//Uses the script which keeps track of all values
     public List<Quaternion> roomList = new List<Quaternion>();//This is a list of Rooms - first two values are the x and y position of the lower left corner of the room, while z and w are the width and height of the room
+    int roomWallCount;//A tracker variable that keeps track of how many rooms Walls have been built for
+    public bool building;//Whether the map is currently being built
     void Start()
     {
         
@@ -40,15 +43,22 @@ public class ManagerScript : MonoBehaviour
             if(myRooms.Count == 0 && myHallways.Count == 0 ) {
                 endgame = 2;
                 buildWalls();
+                roomWallCount = 0;
             }
         }
         else if(endgame == 2) {
             //This is when Rooms are actually built, and everything is put in the rooms
             //At the moment though, just builds walls separating rooms
-            buildRoomWalls();
-            endgame = 3;
+            buildRoomWalls(roomList[roomWallCount]);
+            //Add to the roomWallCOunter, which if it is greater than the number of rooms, goes to next phase
+            
+            roomWallCount++;
+            if(roomWallCount >= roomList.Count) {
+                endgame = 3;
+            }
         }
-        else if(endgame == 3) {  
+        else if(endgame == 3) {
+            building = false;//Stuff is no longer being built at this time
             playerSetup();
             endgame = 0;
         }
@@ -80,6 +90,7 @@ public class ManagerScript : MonoBehaviour
     void playerSetup() {
         //Resets camera position
         myCamera.transform.position = new Vector3(0f, 0f, -10f);
+        myCamera.orthographicSize = 5;
         //Creates the player
         PlayerControl myPlayer = Instantiate(myPlayerPrefab, new Vector3(0.5f, 0.5f, -1f), Quaternion.identity);
         //Assigns attributes to the player
@@ -98,6 +109,10 @@ public class ManagerScript : MonoBehaviour
         exitPos = Random.Range(floorList.Count / 2, floorList.Count);
         //Give it its sprite14
         floorTilemap.SetTile(floorTilePos[exitPos], exitTile);
+        playerCanvasManager.enabled = true;
+        InGameCanvasManager inGameCanvas = playerCanvasManager.GetComponent<InGameCanvasManager>();
+        inGameCanvas.enabled = true;
+        inGameCanvas.myPlayer = myPlayer;
     }
     public void runBuild() {
         //Called by the Start Build Button, where it creates a hallway tile placer, and removes all of the canvas
@@ -119,10 +134,51 @@ public class ManagerScript : MonoBehaviour
         baseHallwayMaker.maxHallwayLength = myValueTracker.maxMaxHallwayLength;
         baseHallwayMaker.JogTurns = myValueTracker.jogTurnOn;
         baseHallwayMaker.jogTurnPercent = myValueTracker.jogTurnPercent;
+        baseHallwayMaker.generateHallwayOnRoomGenerationPercent = myValueTracker.generateHallwayOnRoomGenerationPercent;
         baseHallwayMaker.myManager = this;
         baseHallwayMaker.floorTilemap = floorTilemap;
+        building = true;
     }
-    void buildRoomWalls() {
+    void buildRoomWalls(Quaternion currentRoom) {
+        //Builds walls between rooms where it is needed
+        //Eventually, will be a conditional that can be changed in the options
+        //At first, creates a list of the edge of the room
+        //Also, get list of wall and normal floor tiles in the area
+        List<Vector3Int> roomEdges = new List<Vector3Int>();
+        List<Vector3Int> basicRoomTiles = new List<Vector3Int>();
+        List<Vector3Int> roomWalls = new List<Vector3Int>();
+        //Goes along the x-axis
+        for(int i = 0; i < currentRoom.y; i++) {
+            //Goes along the y-Axis
+            for(int j = 0; j < currentRoom.z; j++) {
+                //Get the index of the current position
+                    //Position is gotten as: lower left corner +i x, j y
+                int index = floorTilePos.IndexOf(new Vector3Int(Mathf.RoundToInt(currentRoom.x) + i, Mathf.RoundToInt(currentRoom.z) + j, 0));
+                if(index > -1) {
+                    //If the current spot is a roomEdge, you add it to the roomEdge list
+                    if(floorTileType[index] == -2) {
+                        roomEdges.Add(floorTilePos[index]);
+                    }
+                    else if(floorTileType[index] == -1 ) {
+                        basicRoomTiles.Add(floorTilePos[index]);
+                    }
+                    else if(floorTileType[index] == 0) {
+                        roomWalls.Add(floorTilePos[index]);
+                    }
+                }
+            }
+        }
+        //After the list is gathered, you check each against wall conditions
+        //FOR NOW, JUST USING BASIC WALL CONDITIONS: room tiles on two sides of the wall
+        for(int i = 0; i < roomEdges.Count; i++) {
+            if((floorTileType[floorTilePos.IndexOf(roomEdges[i] + new Vector3Int(1, 0, 0))] == -1 && floorTileType[floorTilePos.IndexOf(roomEdges[i] + new Vector3Int(-1, 0, 0))] < 0) || ( floorTileType[floorTilePos.IndexOf(roomEdges[i] + new Vector3Int(0, 1, 0))] < 0 && floorTileType[floorTilePos.IndexOf(roomEdges[i] + new Vector3Int(0, -1, 0))] == -1)) {
+                floorTilemap.SetTile(roomEdges[i], wallTile);
+                floorTileType[floorTilePos.IndexOf(roomEdges[i])] = 0;
+            }
+        }
+
+        //Commenting out this original script
+        /*
         for(int i =0; i < floorTilePos.Count; i++) {
             //Only if it is a room edge does it test things
             if(floorTileType[i] == -2) {
@@ -132,6 +188,7 @@ public class ManagerScript : MonoBehaviour
                 }
             }
         }
+        */
     }
 
 }

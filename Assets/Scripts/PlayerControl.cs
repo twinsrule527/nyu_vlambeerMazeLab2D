@@ -54,7 +54,7 @@ public class PlayerControl : MonoBehaviour
     //This is called regardless of which direction you are pointing, so that you attempt to move in that direction
     void Move() {
         //Always places a Shadow at its position
-        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 1f), transform.rotation);
+        Instantiate(myShadow, transform.position + new Vector3(0f, 0f, 0.5f), transform.rotation);
         //Checks the tile immediately in front of the player
         //Gets a Vector3Int of pos in front of the player:
         Vector3 posIntermediary = transform.position + transform.up;

@@ -33,6 +33,7 @@ public class HallwayTileMaker : MonoBehaviour
     public int maxHallwayLength;//See minHallwayLength
     public bool JogTurns;//Whether the hallway can jog over 1 block while moving
     public float jogTurnPercent;//Chance for it to make a jog of a turn
+    public float generateHallwayOnRoomGenerationPercent;//The probability that this HallwayTileMaker, if it is the base, will generate another hallway on Room Generation
     void Start()
     {
         //This is added to the Manager object's list of Hallways
@@ -108,6 +109,7 @@ public class HallwayTileMaker : MonoBehaviour
                     myClone.JogTurns = JogTurns;
                     myClone.jogTurnPercent = jogTurnPercent;
                     myClone.clone = true;
+                    myClone.pause = false;
                     //The clone is also rotated and pushed forward in some direction
                     float rnd2 = Random.Range(0f, 1f);
                     if(rnd2 < 0.5f) {
@@ -153,12 +155,14 @@ public class HallwayTileMaker : MonoBehaviour
                     myCloneRoom.myManager = myManager;//The clone Room's manager becomes this
                     myCloneRoom.roomWidth = Random.Range(minRoomSize, maxRoomSize);
                     myCloneRoom.roomHeight = Random.Range(minRoomSize, maxRoomSize);
+                    myCloneRoom.myMaker = this;
+                    pause = true;
                     //myManager.myRooms.Add( myCloneRoom );
                     hallLength += 4;//Automatically increases its hallway length by a lot, so it can turn away from the room possibly early
                     if(!clone) {
                         //Non-clone has a chance of creating another clone hallway
                         float randomNumber3 = Random.Range(0f, 1.0f);
-                        if(randomNumber3 > 0.5f) {
+                        if(randomNumber3 < generateHallwayOnRoomGenerationPercent) {
                             //If it does, it will also be rotated
                             HallwayTileMaker myClone = Instantiate(HallwayMakerPrefab, transform.position, transform.rotation);
 				            //myManager.myHallways.Add( myClone );
@@ -176,6 +180,7 @@ public class HallwayTileMaker : MonoBehaviour
                             myClone.JogTurns = JogTurns;
                             myClone.jogTurnPercent = jogTurnPercent;
                             myClone.clone = true;
+                            myClone.pause = false;
 				            //The clone will also be rotated and pushed forward
 				            float randomNumber2 = Random.Range(0.0f, 100f);
 				            if(randomNumber2 < 50f) {
@@ -228,6 +233,26 @@ public class HallwayTileMaker : MonoBehaviour
                 }
                 
                 transform.position += transform.up;
+                //As a secondary clause, if the player has elicited to skip through tiles, this coming while clause does that
+                if(myManager.myValueTracker.skipExistingTilesOn) {
+                    int j = 0;//This exists purely as a placeholding variable
+                    bool turned = false;//Check variable, in case the maker turns while skipping
+                    while(floorTilemap.GetTile(new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0)) != null && j < 500) {
+                        transform.position += transform.up;
+                        //If skip turns are allowed, it might turn, but only a maximum of once
+                        if(j >= minHallLength && myManager.myValueTracker.skipTurnAllowedOn && !turned) {
+                            float rnd2 = Random.Range(0f, 1f);
+                            if(rnd2 < turnPercent / 2) {
+                                transform.eulerAngles += new Vector3(0f, 0f, 90f);
+                                turned = true;
+                            }
+                            else if(rnd2 < turnPercent) {
+                                transform.eulerAngles -= new Vector3(0f, 0f, -90f);
+                                turned = false;
+                            }
+                        }
+                    }
+                }
                 //The straight length of the hall increases by 1
                 //Other traits are also increased by 1
                 myCounter++;

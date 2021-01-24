@@ -105,6 +105,20 @@ public class ValueTracker : MonoBehaviour
     public void changeRoomOverlapOn() {
         roomOverlapOn = !roomOverlapOn;
     }
+    public float generateHallwayOnRoomGenerationPercent;//The probability of whether the base hallway Generator will generate more hallways when it generates a room
+    public Slider generateHallwayOnRoomGenerationSlider;
+    public void changeGenerateHallwayOnRoomGeneration() {
+        generateHallwayOnRoomGenerationPercent = generateHallwayOnRoomGenerationSlider.value;
+    }
+    public bool skipExistingTilesOn;//For hallway generation, this means that halways will immediately skip ahead through straight lines of tiles
+    //Will create longer straight paths, and may cause slightly more lag, but overall, will generate the map more efficiently
+    public void changeSkipExistingTilesOn() {
+        skipExistingTilesOn = !skipExistingTilesOn;
+    }
+    public bool skipTurnAllowedOn;//When skipExistingTiles is on, this bool determines whether the hallway should follow turning rules while skipping tiles
+    public void changeSkipTurnAllowedOn() {
+        skipTurnAllowedOn = !skipTurnAllowedOn;
+    }
     void Start()
     {
         //At the start, all values are set to be equal to that of the slider
@@ -120,6 +134,7 @@ public class ValueTracker : MonoBehaviour
         roomGeneratePercent = roomGenerateSlider.value;
         hallwayGeneratePercent = hallwayGenerateSlider.value;
         jogTurnPercent = jogTurnSlider.value;
+        generateHallwayOnRoomGenerationPercent = generateHallwayOnRoomGenerationSlider.value;
 
     }
 
